@@ -7,10 +7,10 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-if [[ -n $CODE_SIGNING_CERTIFICATE_PATH ]]; then
-  echo "Signing jar with certificate from $CODE_SIGNING_CERTIFICATE_PATH"
-  jarsigner $BUILD_DIR/app.jar -keystore ${BUILD_DIR}${CODE_SIGNING_CERTIFICATE_PATH} jar_signing -storepass "jar_signing" -keypass "jar_signing"
-fi
+CODE_SIGNING_CERTIFICATE_PATH=$(cat ${ENV_DIR}/CODE_SIGNING_CERTIFICATE_PATH || "${BUILD_DIR}/conf/jar_signing.keystore")
+
+echo "Signing jar with certificate from $CODE_SIGNING_CERTIFICATE_PATH"
+jarsigner $BUILD_DIR/app.jar -keystore ${BUILD_DIR}${CODE_SIGNING_CERTIFICATE_PATH} jar_signing -storepass "jar_signing" -keypass "jar_signing"
 
 echo "-----> Cleaning up"
 
